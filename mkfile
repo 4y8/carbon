@@ -2,25 +2,29 @@ MKSHELL=$PLAN9/bin/rc
 
 OFILES=kernel/kernel.o\
 	boot/boot.o
-IMG=carbon
+IMG=kernel8
+LIB=lib/uart.a
 
 $IMG.img: $OFILES $IMG.elf
 	aarch64-elf-objcopy $IMG.elf -O binary $IMG.img
 
-$IMG.elf:
+$IMG.elf: $LIB
 	aarch64-elf-gcc -T \
 	    scripts/linker.ld \
 	    -o $IMG.elf \
 	    -ffreestanding \
-	    -nostdlib $OFILES -lgcc
-
+	    -nostdlib $OFILES $LIB -lgcc
 
 nuke:V:
-	for (file in $OFILES)
-	    rm $file
+	for (file in $OFILES $LIB $IMG.elf)
+	    rm -f $file
 
-test:V: carbon.img
-	qemu-system-aarch64 -M raspi3 -serial stdio -kernel carbon.img
+test:V: $IMG.img
+	qemu-system-aarch64 -M raspi3 -serial stdio -kernel $IMG.img
 
 %.o:
-	cd `{dirname $stem.o}; mk; cd `{git rev-parse --show-toplevel}
+	cd `{dirname $stem.o}; mk
+
+%.a:
+	cd lib; mk `{basename $stem}.a
+
