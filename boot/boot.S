@@ -16,4 +16,4 @@ _start:
 	sub w6, w6, #1
 	cbnz w6, 3b
 4:	bl kernel_main
-//	b 1b
+1:	b 1b
