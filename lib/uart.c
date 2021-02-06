@@ -36,33 +36,33 @@
 #define AUX_MU_BAUD     ((volatile unsigned int*)(MMIO_BASE+0x00215068))
 
 void
-uart_init()
+uart_init(void)
 {
 	register unsigned int r;
 
-	*AUX_ENABLE |=1;       // enable UART1, AUX mini uart
+	*AUX_ENABLE |=1;
 	*AUX_MU_CNTL = 0;
-	*AUX_MU_LCR = 3;       // 8 bits
+	*AUX_MU_LCR = 3;
 	*AUX_MU_MCR = 0;
 	*AUX_MU_IER = 0;
-	*AUX_MU_IIR = 0xc6;    // disable interrupts
-	*AUX_MU_BAUD = 270;    // 115200 baud
+	*AUX_MU_IIR = 0xc6;
+	*AUX_MU_BAUD = 270;
 	r=*GPFSEL1;
-	r &= ~((7<<12) | (7<<15)); // gpio14, gpio15
-	r |= (2<<12) | (2<<15);    // alt5
+	r &= ~((7 << 12) | (7 << 15)); // gpio14, gpio15
+	r |= (2 << 12) | (2 << 15);    // alt5
 	*GPFSEL1 = r;
 	*GPPUD = 0;            // enable pins 14 and 15
 	r=150;
-	while(r--) { __asm__ volatile("nop"); }
-	*GPPUDCLK0 = (1<<14)|(1<<15);
+	while (r--) __asm__ volatile("nop");
+	*GPPUDCLK0 = (1 << 14) | (1 << 15);
 	r=150;
-	while(r--) { __asm__ volatile("nop"); }
+	while (r--) __asm__ volatile("nop");
 	*GPPUDCLK0 = 0;        // flush GPIO setup
 	*AUX_MU_CNTL = 3;      // enable Tx, Rx
 }
 
 void
-uart_send(unsigned int c)
+uart_putc(unsigned int c)
 {
 	while (!(*AUX_MU_LSR&0x20)) __asm__ volatile("nop");
 	*AUX_MU_IO=c;
@@ -73,6 +73,7 @@ uart_getc()
 {
 	char r;
 
+	uart_putc('e');
 	while (!(*AUX_MU_LSR&0x01)) __asm__ volatile("nop");
 	r = (char)(*AUX_MU_IO);
 	return r == '\r' ? '\n' : r;
@@ -83,7 +84,7 @@ uart_puts(const char *s)
 {
 	while (*s) {
 		if (*s == '\n')
-			uart_send('\r');
-		uart_send(*s++);
+			uart_putc('\r');
+		uart_putc(*s++);
 	}
 }

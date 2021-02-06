@@ -1,2 +1,4 @@
+<`{git rev-parse --show-toplevel}/config.mk
+
 boot.o:
-	aarch64-elf-as -c boot.S -o boot.o
+	aarch64-elf-gcc $CFLAGS -c boot.S -o boot.o

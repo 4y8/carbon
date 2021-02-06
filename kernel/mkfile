@@ -1,4 +1,4 @@
 <`{git rev-parse --show-toplevel}/config.mk
 
 kernel.o:
-	aarch64-elf-gcc $CFLAGS -ffreestanding -c kernel.c -o kernel.o
+	aarch64-elf-gcc $CFLAGS -c kernel.c -o kernel.o

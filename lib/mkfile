@@ -4,4 +4,4 @@
 	aarch64-elf-ar rsc $stem.a $stem.o
 
 %.o:
-	aarch64-elf-gcc $CFLAGS -ffreestanding -c $stem.c -o $stem.o
+	aarch64-elf-gcc $CFLAGS -c $stem.c -o $stem.o
