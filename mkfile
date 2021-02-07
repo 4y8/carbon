@@ -1,32 +1,28 @@
+<config.mk
+
 MKSHELL=$PLAN9/bin/rc
 
-OFILES=kernel/kernel.o\
-	boot/boot.o
-IMG=kernel8
-LIB=lib/uart.a
+FILES=boot/boot.o boot/multiboot_header.o
+kernel=kernel.bin
+iso=carbon.iso
 
-$IMG.img: $OFILES $IMG.elf
-	aarch64-elf-objcopy -O binary $IMG.elf $IMG.img
+all:V: $iso
 
-$IMG.elf: $LIB
-	aarch64-elf-gcc \
-	    -nostdlib \
-	    -nostartfiles \
-	    $OFILES $LIB \
-	    -T scripts/linker.ld \
-	    -o $IMG.elf
+$iso: $OFILES $kernel
+	mkdir iso iso/boot iso/boot/grub
+	cp boot/grub.cfg iso/boot/grub
+	cp kernel.bin iso/boot
+	grub-mkrescue -o $iso iso
+	rm -rf iso
 
 nuke:V:
-	for (file in $OFILES $LIB $IMG.elf)
-	    rm -f $file
+	rm -rf iso
 
-test:V: $IMG.img
-	qemu-system-aarch64 -M raspi3 -serial null -serial stdio \
-	    -kernel $IMG.img
+$kernel: $OFILES
+	ld -n -o $kernel -T linker.ld $OFILES
 
 %.o:
-	cd `{dirname $stem.o}; mk `{basename $stem}.o
+	cd `{dirname $stem}; mk `{basename $stem}.o
 
-%.a:
-	cd lib; mk `{basename $stem}.a
-
+run:V:
+	qemu-system-x86_64 -cdrom $iso

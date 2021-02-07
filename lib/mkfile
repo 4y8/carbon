@@ -1,7 +1,0 @@
-<`{git rev-parse --show-toplevel}/config.mk
-
-%.a: %.o
-	aarch64-elf-ar rsc $stem.a $stem.o
-
-%.o:
-	aarch64-elf-gcc $CFLAGS -c $stem.c -o $stem.o
