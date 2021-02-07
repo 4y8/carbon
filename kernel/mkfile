@@ -1,0 +1,4 @@
+<`{git rev-parse --show-toplevel}/config.mk
+
+kernel.o: kernel.c
+	$CC $CFLAGS -c kernel.c -o kernel.o

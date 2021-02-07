@@ -1,6 +1,7 @@
 *.o
 *.a
-*.elf
-*.img
+*.iso
+iso/*
+*.bin
 *~
 *#

@@ -2,27 +2,32 @@
 
 MKSHELL=$PLAN9/bin/rc
 
-FILES=boot/boot.o boot/multiboot_header.o
-kernel=kernel.bin
-iso=carbon.iso
+ASMOFILES=boot/boot.o boot/multiboot_header.o boot/long_main.o
+KERNELOFILES=kernel/kernel.o
+OFILES=$ASMOFILES $KERNELOFILES
+KERNEL=kernel.bin
+ISO=carbon.iso
 
-all:V: $iso
+all:V: $ISO
 
-$iso: $OFILES $kernel
-	mkdir iso iso/boot iso/boot/grub
+$ISO: $KERNEL
+	mkdir -p iso iso/boot iso/boot/grub
 	cp boot/grub.cfg iso/boot/grub
-	cp kernel.bin iso/boot
-	grub-mkrescue -o $iso iso
-	rm -rf iso
+	cp $KERNEL iso/boot
+	grub-mkrescue -o $ISO iso
 
 nuke:V:
-	rm -rf iso
+	for (file in iso $OFILES $ISO $KERNEL)
+	    rm -rf $file
 
-$kernel: $OFILES
-	ld -n -o $kernel -T linker.ld $OFILES
+$KERNEL: $OFILES
+	$LD -n -o $KERNEL -T linker.ld $OFILES
 
-%.o:
+%.o: %.c
 	cd `{dirname $stem}; mk `{basename $stem}.o
 
-run:V:
-	qemu-system-x86_64 -cdrom $iso
+%.o: %.asm
+	cd `{dirname $stem}; mk `{basename $stem}.o
+
+run:V: $ISO
+	qemu-system-x86_64 -cdrom $ISO
