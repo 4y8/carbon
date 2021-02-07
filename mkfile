@@ -7,6 +7,8 @@ KERNELOFILES=kernel/kernel.o
 OFILES=$ASMOFILES $KERNELOFILES
 KERNEL=kernel.bin
 ISO=carbon.iso
+LIB=libio.a
+LIBFLAGS=${LIB:lib%.a=-l%}
 
 all:V: $ISO
 
@@ -20,14 +22,18 @@ nuke:V:
 	for (file in iso $OFILES $ISO $KERNEL)
 	    rm -rf $file
 
-$KERNEL: $OFILES
-	$LD -n -o $KERNEL -T linker.ld $OFILES
+$KERNEL: $OFILES $LIB
+	echo $LIBFLAGS
+	$LD $LDFLAGS -n -o $KERNEL -T linker.ld $OFILES $LIBFLAGS
 
 %.o: %.c
 	cd `{dirname $stem}; mk `{basename $stem}.o
 
 %.o: %.asm
 	cd `{dirname $stem}; mk `{basename $stem}.o
+
+lib%.a: lib/%.c
+	cd lib; mk lib$stem.a
 
 run:V: $ISO
 	qemu-system-x86_64 -cdrom $ISO
