@@ -26,6 +26,8 @@ $KERNEL: $OFILES $LIB
 	echo $LIBFLAGS
 	$LD $LDFLAGS -n -o $KERNEL -T linker.ld $OFILES $LIBFLAGS
 
+initrd: mkinitrd
+
 %.o: %.c
 	cd `{dirname $stem}; mk `{basename $stem}.o
 
@@ -34,6 +36,9 @@ $KERNEL: $OFILES $LIB
 
 lib%.a: lib/%.c
 	cd lib; mk lib$stem.a
+
+%: tools/%c
+	cd `{dirname $stem}; mk `{basename $stem}; cp % $ROOT/
 
 run:V: $ISO
 	qemu-system-x86_64 -cdrom $ISO

@@ -10,6 +10,9 @@ long_main:
 	mov fs, ax
 	mov gs, ax
 
+	;; Get arguments given by the bootloader
+	mov esi, [esp]
+	mov edi, [esp + 4]
 	extern kernel_main
 	call kernel_main
 	hlt

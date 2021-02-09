@@ -4,10 +4,15 @@ extern long_main
 section .text
 bits 32
 start:
+	mov esp, stack_top
+
+	;; Save the multiboot2 given by the bootloader
+	push eax
+	push ebx
+
 	call set_up_page_tables
 	call enable_paging
 
-	mov esp, stack_top
 	lgdt [gdt64.pointer]
 	jmp gdt64.code:long_main
 	hlt
@@ -71,5 +76,5 @@ p3_table:
 p2_table:
 	resb 4096
 stack_bottom:
-	resb 64
+	resq 4096
 stack_top:
