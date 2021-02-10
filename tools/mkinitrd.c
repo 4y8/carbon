@@ -5,13 +5,13 @@
 struct initrd_superblock {
 	unsigned char magic;
 	int ninode;
-} __attribute__((packed, aligned(1)));
+} __attribute__((packed));
 
 struct initrd_inode {
 	char name[128];
 	unsigned long offset;
 	unsigned long length;
-} __attribute__((packed, aligned(1)));
+} __attribute__((packed));
 
 long offset = 0;
 FILE *ofile;
@@ -19,7 +19,7 @@ FILE *ofile;
 static void
 ewrite(void *buf, size_t size)
 {
-	if (size == fwrite(buf, size, 1, ofile)) {
+	if (1 == fwrite(buf, size, 1, ofile)) {
 		offset += size;
 	} else {
 		exit(1);
@@ -34,7 +34,7 @@ main(int argc, char **argv)
 	struct initrd_superblock superblock;
 	char *buf;
 
-	ofile = fopen("./initrd", "w");
+	ofile = fopen("./initrd.img", "w");
 
 	superblock.magic = 0x42;
 	superblock.ninode = argc - 1;

@@ -1,4 +1,4 @@
 <`{git rev-parse --show-toplevel}/config.mk
 
 %: %.c
-	$CC $LDFLAGS -lfs $stem.c -o $stem
+	$CC $LDFLAGS $stem.c -o $stem

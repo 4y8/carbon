@@ -5,3 +5,5 @@ iso/*
 *.bin
 *~
 *#
+mkinitrd
+*.img

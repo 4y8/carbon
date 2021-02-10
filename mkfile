@@ -12,9 +12,10 @@ LIBFLAGS=${LIB:lib%.a=-l%}
 
 all:V: $ISO
 
-$ISO: $KERNEL
-	mkdir -p iso iso/boot iso/boot/grub
-	cp boot/grub.cfg iso/boot/grub
+$ISO: $KERNEL initrd.img boot/grub.cfg
+	mkdir -p iso iso/boot iso/boot/grub iso/fs
+	cp initrd.img iso/fs/initrd
+	cp boot/grub.cfg iso/boot/grub/grub.cfg
 	cp $KERNEL iso/boot
 	grub-mkrescue -o $ISO iso
 
@@ -23,10 +24,10 @@ nuke:V:
 	    rm -rf $file
 
 $KERNEL: $OFILES $LIB
-	echo $LIBFLAGS
 	$LD $LDFLAGS -n -o $KERNEL -T linker.ld $OFILES $LIBFLAGS
 
-initrd: mkinitrd
+initrd.img: mkinitrd
+	./mkinitrd initrd/*
 
 %.o: %.c
 	cd `{dirname $stem}; mk `{basename $stem}.o
@@ -37,8 +38,8 @@ initrd: mkinitrd
 lib%.a: lib/%.c
 	cd lib; mk lib$stem.a
 
-%: tools/%c
-	cd `{dirname $stem}; mk `{basename $stem}; cp % $ROOT/
+%: tools/%.c
+	cd tools; mk $stem; cp $stem $ROOT/
 
 run:V: $ISO
 	qemu-system-x86_64 -cdrom $ISO

@@ -1,7 +1,7 @@
 #ifndef __IO_H_
 #define __IO_H_
 
-void puts(const char *s);
+void puts(char *s);
 
 void putchar(char c);
 

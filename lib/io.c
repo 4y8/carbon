@@ -35,7 +35,7 @@ putchar(char c)
 }
 
 void
-puts(const char *s)
+puts(char *s)
 {
 	for (; *s != '\0'; ++s)
 		putchar(*s);

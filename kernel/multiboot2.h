@@ -7,8 +7,9 @@
 
 enum {
 	MULTIBOOT2_END = 0,
-	MULTIBOOT2_MODULE = 1,
-	MULTIBOOT2_STRING = 3
+	MULTIBOOT2_CMDLINE = 1,
+	MULTIBOOT2_BOOTLOADER_NAME = 2,
+	MULTIBOOT2_MODULE = 3,
 };
 
 struct multiboot2_tag {
@@ -21,13 +22,13 @@ struct multiboot2_tag_module {
 	u32 size;
 	u32 mod_start;
 	u32 mod_end;
-	char *string;
+	char string[0];
 } __attribute__((packed));
 
 struct multiboot2_tag_string {
 	u32 type;
 	u32 size;
-	char *string;
+	char string[0];
 } __attribute__((packed));
 
 #endif /* __MULTIBOOT2_H_ */
