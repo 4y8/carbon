@@ -13,8 +13,8 @@ LIBFLAGS=${LIB:lib%.a=-l%}
 all:V: $ISO
 
 $ISO: $KERNEL initrd.img boot/grub.cfg
-	mkdir -p iso iso/boot iso/boot/grub iso/fs
-	cp initrd.img iso/fs/initrd
+	mkdir -p iso iso/boot iso/boot/grub
+	cp initrd.img iso/initrd
 	cp boot/grub.cfg iso/boot/grub/grub.cfg
 	cp $KERNEL iso/boot
 	grub-mkrescue -o $ISO iso

@@ -15,7 +15,7 @@ enum {
 struct multiboot2_tag {
 	u32 type;
 	u32 size;
-} __attribute__((packed));
+};
 
 struct multiboot2_tag_module {
 	u32 type;
@@ -23,12 +23,18 @@ struct multiboot2_tag_module {
 	u32 mod_start;
 	u32 mod_end;
 	char string[0];
-} __attribute__((packed));
+};
 
 struct multiboot2_tag_string {
 	u32 type;
 	u32 size;
 	char string[0];
-} __attribute__((packed));
+};
+
+typedef void (*ModuleHandler)(struct multiboot2_tag_module *);
+
+void multiboot2_init(ulong address);
+
+void multiboot2_map_modules(ModuleHandler callback);
 
 #endif /* __MULTIBOOT2_H_ */

@@ -23,9 +23,7 @@ kernel_main(ulong magic, ulong multiboot_header)
 		if (tag->type == MULTIBOOT2_MODULE) {
 			struct multiboot2_tag_module *m =
 				(struct multiboot2_tag_module *)tag;
-			putchar(((char *)(ulong)m->mod_start)[0]);
-			putchar('*');
-			puts((char *)m->string);
+			putchar(((char *)(long)m->mod_start)[0]);
 		}
 	}
 	while(1);
