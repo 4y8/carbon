@@ -9,6 +9,7 @@ struct initrd_superblock {
 
 struct initrd_inode {
 	char name[128];
+	char type;
 	unsigned long offset;
 	unsigned long length;
 } __attribute__((packed));
@@ -48,6 +49,7 @@ main(int argc, char **argv)
 		fseek(ifile, 0, SEEK_END);
 		inodes[i - 1].length = ftell(ifile);
 		inodes[i - 1].offset = offset;
+		inodes[i - 1].type = 0;
 
 		fseek(ifile, 0, SEEK_SET);
 		buf = malloc(inodes[i - 1].length);

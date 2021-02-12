@@ -16,6 +16,8 @@ kernel_main(ulong magic, ulong multiboot_header)
 	}
 	puts("Hello world!");
 
+	multiboot2_init(multiboot_header + 8);
+
 	for (tag = (struct multiboot2_tag *)(multiboot_header + 8);
 	     tag->type != MULTIBOOT2_END;
 	     tag = (struct multiboot2_tag *)((byte *)tag +

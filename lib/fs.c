@@ -7,13 +7,13 @@ struct superblock {
 	byte magic_number;
 	long nfree_blocks;
 	byte *free_blocks;
-} __attribute__((packed, aligned(1)));
+} __attribute__((packed));
 
 enum file_type {
 	FT_DIRECTORY,
 	FT_FILE,
 	FT_LINK
-} __attribute__((packed, aligned(1)));
+} __attribute__((packed));
 
 struct inode {
 	byte owner;
@@ -21,4 +21,4 @@ struct inode {
 	uint nlink;
 	ulong size;
 	byte *direct_blocks[10];
-} __attribute__((packed, aligned(1)));
+} __attribute__((packed));
