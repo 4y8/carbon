@@ -1,6 +1,0 @@
-<`{git rev-parse --show-toplevel}/config.mk
-
-HFILES=initrd.h multiboot2.h
-
-kernel.o: kernel.c $HFILES
-	$CC $CFLAGS -c kernel.c -o kernel.o

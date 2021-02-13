@@ -3,7 +3,8 @@
 
 #include <stdarg.h>
 
-void vsnprint(char *fmt, char *buffer, int n, va_list arg);
-void vsprint(char *fmt, char *buffer, va_list arg);
+int vsnprint(char *fmt, char *buffer, int n, va_list args);
+
+int snprint(char *fmt, char *buffer, int n, ...);
 
 #endif /* __FMT_H_ */

@@ -1,2 +1,0 @@
-%.o: %.asm
-	nasm -felf64 $stem.asm

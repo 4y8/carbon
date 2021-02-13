@@ -1,5 +1,6 @@
 #include <io.h>
 #include <types.h>
+#include <libc.h>
 
 #include "initrd.h"
 #include "multiboot2.h"
@@ -7,8 +8,7 @@
 int
 kernel_main(ulong magic, ulong multiboot_header)
 {
-	struct multiboot2_tag *tag;
-
+	char s[10];
 	clear_terminal();
 	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC) {
 		puts("Error: invalid multiboot2 magic number");
@@ -17,16 +17,7 @@ kernel_main(ulong magic, ulong multiboot_header)
 	puts("Hello world!");
 
 	multiboot2_init(multiboot_header + 8);
+	puts(s);
 
-	for (tag = (struct multiboot2_tag *)(multiboot_header + 8);
-	     tag->type != MULTIBOOT2_END;
-	     tag = (struct multiboot2_tag *)((byte *)tag +
-	                                     ((tag->size + 7) & ~7))) {
-		if (tag->type == MULTIBOOT2_MODULE) {
-			struct multiboot2_tag_module *m =
-				(struct multiboot2_tag_module *)tag;
-			putchar(((char *)(long)m->mod_start)[0]);
-		}
-	}
 	while(1);
 }

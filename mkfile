@@ -3,12 +3,13 @@
 MKSHELL=$PLAN9/bin/rc
 
 ASMOFILES=boot/boot.o boot/multiboot_header.o boot/long_main.o
-KERNELOFILES=kernel/kernel.o
+KERNELOFILES=kernel/kernel.o kernel/multiboot2.o kernel/initrd.o
 OFILES=$ASMOFILES $KERNELOFILES
 KERNEL=kernel.bin
 ISO=carbon.iso
-LIB=libio.a
-LIBFLAGS=${LIB:lib%.a=-l%}
+LIB=io fmt fs string libc
+LIBFILES=${LIB:%=lib/lib%.a}
+LIBFLAGS=${LIB:%=-l%}
 
 all:V: $ISO
 
@@ -23,20 +24,21 @@ nuke:V:
 	for (file in iso $OFILES $ISO $KERNEL)
 	    rm -rf $file
 
-$KERNEL: $OFILES $LIB
+$KERNEL: $OFILES $LIBFILES
 	$LD $LDFLAGS -n -o $KERNEL -T linker.ld $OFILES $LIBFLAGS
 
 initrd.img: mkinitrd
 	./mkinitrd initrd/*
 
+lib/lib%.a: lib/%.o
+	cd lib;	$AR rsc lib$stem.a $stem.o
+
 %.o: %.c
-	cd `{dirname $stem}; mk `{basename $stem}.o
+	base=`{basename $stem}
+	cd `{dirname $stem}; $CC $CFLAGS -c $base.c -o $base.o
 
 %.o: %.asm
-	cd `{dirname $stem}; mk `{basename $stem}.o
-
-lib%.a: lib/%.c
-	cd lib; mk lib$stem.a
+	cd `{dirname $stem}; nasm -felf64 `{basename $stem}.asm
 
 %: tools/%.c
 	cd tools; mk $stem; cp $stem $ROOT/

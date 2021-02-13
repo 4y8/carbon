@@ -1,6 +1,0 @@
-<`{git rev-parse --show-toplevel}/config.mk
-
-lib%.a: %.o
-	$AR rsc lib$stem.a $stem.o
-%.o: %.c
-	$CC $CFLAGS -c $stem.c -o $stem.o
