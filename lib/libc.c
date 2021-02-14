@@ -32,5 +32,5 @@ itoa(int value, char *buf, int base, int bufsize)
 		buf[j] = buf[i - j - 1];
 		buf[i - j - 1] = c;
 	}
-	return 0;
+	return i;
 }

@@ -1,6 +1,7 @@
 #include <io.h>
 #include <types.h>
 #include <libc.h>
+#include <fmt.h>
 
 #include "initrd.h"
 #include "multiboot2.h"
@@ -8,7 +9,7 @@
 int
 kernel_main(ulong magic, ulong multiboot_header)
 {
-	char s[10];
+	char s[100];
 	clear_terminal();
 	if (magic != MULTIBOOT2_BOOTLOADER_MAGIC) {
 		puts("Error: invalid multiboot2 magic number");
@@ -17,6 +18,7 @@ kernel_main(ulong magic, ulong multiboot_header)
 	puts("Hello world!");
 
 	multiboot2_init(multiboot_header + 8);
+	snprint("%x", s, 100, 0xFF);
 	puts(s);
 
 	while(1);
