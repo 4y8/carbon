@@ -9,7 +9,7 @@ void putchar(char c);
 
 void clear_terminal(void);
 
-void vprint(char *fmt, va_list arg);
+void vprint(char *fmt, va_list ap);
 void print(char *fmt, ...);
 
 #endif /* __IO_H_ */

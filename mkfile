@@ -30,7 +30,7 @@ $KERNEL: $OFILES $LIBFILES
 initrd.img: mkinitrd
 	./mkinitrd initrd/*
 
-lib/lib%.a: lib/%.o
+lib/lib%.a: lib/%.o lib/%.h
 	cd lib;	$AR rsc lib$stem.a $stem.o
 
 %.o: %.c

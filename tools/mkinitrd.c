@@ -4,7 +4,7 @@
 
 struct initrd_superblock {
 	unsigned char magic;
-	int ninode;
+	unsigned int ninode;
 } __attribute__((packed));
 
 struct initrd_inode {

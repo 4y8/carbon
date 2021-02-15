@@ -1,3 +1,4 @@
+#include <fmt.h>
 #include <io.h>
 
 #define SCREEN_HEIGHT 25
@@ -59,4 +60,24 @@ clear_terminal(void)
 	color = scolor;
 	xpos = 0;
 	ypos = 0;
+}
+
+void
+vprint(char *fmt, va_list ap)
+{
+	char buf[1024];
+
+	if (vsnprint(fmt, buf, 1024, ap) < 0)
+		return;
+	puts(buf);
+}
+
+void
+print(char *fmt, ...)
+{
+	va_list ap;
+
+	va_start(ap, fmt);
+	vprint(fmt, ap);
+	va_end(ap);
 }
