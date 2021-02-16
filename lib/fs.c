@@ -1,5 +1,4 @@
-#include <fs.h>
-#include <types.h>
+#include <libc.h>
 
 #define MAGIC_NUMBER 0x42
 

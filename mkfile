@@ -6,10 +6,11 @@ ASMOFILES=boot/boot.o boot/multiboot_header.o boot/long_main.o
 KERNELOFILES=kernel/kernel.o kernel/multiboot2.o kernel/initrd.o
 OFILES=$ASMOFILES $KERNELOFILES
 KERNEL=kernel.bin
+
 ISO=carbon.iso
-LIB=io fmt fs string libc
-LIBFILES=${LIB:%=lib/lib%.a}
-LIBFLAGS=${LIB:%=-l%}
+
+LIBC=lib/libc.a
+LIBOFILES=lib/io.o lib/fmt.o lib/fs.o lib/string.o lib/libc.o lib/mem.o
 
 all:V: $ISO
 
@@ -21,27 +22,26 @@ $ISO: $KERNEL initrd.img boot/grub.cfg
 	grub-mkrescue -o $ISO iso
 
 nuke:V:
-	for (file in iso $OFILES $ISO $KERNEL)
+	for (file in iso $OFILES $ISO $KERNEL $LIBC)
 	    rm -rf $file
 
-$KERNEL: $OFILES $LIBFILES
-	$LD $LDFLAGS -n -o $KERNEL -T linker.ld $OFILES $LIBFLAGS
+$KERNEL: $OFILES $LIBC
+	$LD $LDFLAGS -n -o $KERNEL -T linker.ld $OFILES -lc
 
 initrd.img: mkinitrd
 	./mkinitrd initrd/*
 
-lib/lib%.a: lib/%.o lib/%.h
-	cd lib;	$AR rsc lib$stem.a $stem.o
-
 %.o: %.c
-	base=`{basename $stem}
-	cd `{dirname $stem}; $CC $CFLAGS -c $base.c -o $base.o
+	$CC $CFLAGS -c $stem.c -o $stem.o
 
 %.o: %.asm
-	cd `{dirname $stem}; nasm -felf64 `{basename $stem}.asm
+	nasm -felf64 $stem.asm -o $stem.o
 
 %: tools/%.c
 	cd tools; mk $stem; cp $stem $ROOT/
+
+lib/libc.a: $LIBOFILES
+	$AR rsc lib/libc.a $LIBOFILES
 
 run:V: $ISO
 	qemu-system-x86_64 -cdrom $ISO

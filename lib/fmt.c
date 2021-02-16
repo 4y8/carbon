@@ -1,7 +1,4 @@
-#include <fmt.h>
 #include <libc.h>
-
-#include <stdarg.h>
 
 #define MAX_FMTS 512
 

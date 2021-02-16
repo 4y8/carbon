@@ -1,10 +1,8 @@
-#include <mem.h>
-#include <types.h>
-
+#include <libc.h>
 
 void
 memcpy(byte *src, byte *dest, ulong n)
 {
-	for (; n >= 0; --n)
+	for (; (long)n >= 0; --n)
 		dest[n] = src[n];
 }

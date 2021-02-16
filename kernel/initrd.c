@@ -1,7 +1,4 @@
 #include <libc.h>
-#include <types.h>
-#include <mem.h>
-#include <string.h>
 
 #include "initrd.h"
 #include "multiboot2.h"
@@ -51,7 +48,7 @@ initrd_load(struct multiboot2_tag_module *module)
 int
 initrd_open(char *file)
 {
-	int fd, i;
+	unsigned int fd, i;
 
 	for (i = 0; i < ninode; ++i) {
 		if (streq(file, ((struct inode *)initrd_root)[i].name))
@@ -81,9 +78,9 @@ initrd_read(int fd, byte *buf, ulong size)
 }
 
 void
-initrd_seek(int fd, ulong n, enum seek type)
+initrd_seek(int fd, ulong n, int type)
 {
-	switch (type) {
+	switch ((enum seek)type) {
 	case SEEK_CUR:
 		fds[fd].pos += n;
 		break;

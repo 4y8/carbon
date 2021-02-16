@@ -1,5 +1,4 @@
-#include <fmt.h>
-#include <io.h>
+#include <libc.h>
 
 #define SCREEN_HEIGHT 25
 #define SCREEN_WIDTH 80

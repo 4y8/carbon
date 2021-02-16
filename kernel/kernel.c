@@ -1,7 +1,4 @@
-#include <io.h>
-#include <types.h>
 #include <libc.h>
-#include <fmt.h>
 
 #include "initrd.h"
 #include "multiboot2.h"

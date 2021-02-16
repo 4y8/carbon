@@ -1,4 +1,4 @@
-#include <types.h>
+#include <libc.h>
 
 #include "multiboot2.h"
 
